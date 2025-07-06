@@ -1,0 +1,212 @@
+/* public/css/sidebar.css */
+:root {
+    --sidebar-width: 17%;
+    --header-height: 60px;
+    --transition-speed: 0.3s;
+    --sidebar-bg: white;
+    --sidebar-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    --nav-link-padding: 0.75rem 1rem;
+    --nav-link-radius: 0.5rem;
+    --nav-icon-size: 1.1rem;
+    --nav-icon-width: 24px;
+}
+
+.sidebar-container {
+    width: var(--sidebar-width);
+    height: calc(85vh - var(--header-height));
+    position: fixed;
+    top: var(--header-height);
+    z-index: 1030;
+    transition: all var(--transition-speed) ease;
+    background-color: var(--sidebar-bg);
+    border-radius: 1rem;
+    box-shadow: var(--sidebar-shadow);
+}
+
+.sidebar-content {
+    max-height: calc(100vh - 60px);
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+/* Navigation items */
+.sidebar-nav {
+    padding: 0.5rem;
+}
+
+.nav-item {
+    margin-bottom: 0.5rem;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: var(--nav-link-padding);
+    border-radius: var(--nav-link-radius);
+    color: var(--bs-primary);
+    transition: all 0.2s ease;
+
+    i {
+        font-size: var(--nav-icon-size);
+        min-width: var(--nav-icon-width);
+        text-align: center;
+    }
+
+    /* Hover styles */
+    &:not(.active):hover {
+        background-color: rgba(var(--bs-primary-rgb), 0.1);
+        transform: translateX(3px);
+    }
+
+    [dir="rtl"] .nav-link:not(.active):hover {
+        transform: translateX(-3px);
+    }
+
+    /* Active state */
+    &.active {
+        font-weight: 500;
+        background-color: var(--bs-secondary) !important;
+        color: white !important;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+        &:hover {
+            transform: none;
+            background-color: var(--bs-secondary) !important;
+        }
+    }
+}
+
+/* Collapse button */
+.collapse-btn {
+    width: 34px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #2660a4;
+    border-radius: 50%;
+    border: none;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(38, 96, 164, 0.1);
+    cursor: pointer;
+    transition:
+        background 0.2s,
+        box-shadow 0.2s,
+        transform 0.15s;
+    z-index: 1040;
+    font-size: 1.2rem;
+    margin: 12px;
+    margin-left: auto;
+
+    &:hover,
+    &:focus {
+        background: #17406a;
+        color: #fff;
+        box-shadow: 0 4px 16px rgba(38, 96, 164, 0.18);
+        outline: none;
+        transform: scale(1.08);
+    }
+
+    &:active {
+        background: #133153;
+        transform: scale(0.98);
+    }
+}
+
+[dir="rtl"] .collapse-btn {
+    margin: 12px;
+    margin-right: auto;
+}
+
+/* Collapsed state */
+.sidebar-collapsed {
+    .sidebar-container {
+        width: max-content;
+        overflow: hidden;
+    }
+
+    .nav-text {
+        display: none;
+    }
+
+    .collapse-btn i {
+        transform: rotate(360deg);
+    }
+}
+
+/* Mobile styles */
+@media (max-width: 992px) {
+    .sidebar-container {
+        width: 85% !important;
+        z-index: 1050;
+        transform: translateX(-110%);
+
+        &.show {
+            transform: translateX(0);
+        }
+    }
+
+    [dir="rtl"] .sidebar-container {
+        transform: translateX(110%);
+        &.show {
+            transform: translateX(0);
+        }
+    }
+
+    .nav-link {
+        padding: 0.65rem 0.5rem !important;
+        font-size: 0.9rem;
+    }
+
+    .sidebar-content {
+        max-height: calc(100vh - 60px) !important;
+    }
+
+    .nav-item {
+        margin-bottom: 0.3rem !important;
+    }
+}
+
+/* Sidebar toggler for medium devices */
+.sidebar-toggler {
+    display: none;
+    position: fixed;
+    top: calc(var(--header-height) + 10px);
+    z-index: 1040;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--sidebar-shadow);
+    background-color: var(--sidebar-bg);
+    border: none;
+    color: var(--bs-primary);
+}
+
+[dir="rtl"] .sidebar-toggler {
+    left: auto;
+    right: 15px;
+}
+
+[dir="ltr"] .sidebar-toggler {
+    left: 15px;
+    right: auto;
+}
+
+@media (max-width: 992px) {
+    .sidebar-toggler {
+        display: flex !important;
+    }
+}
+
+.collapse-btn i {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}

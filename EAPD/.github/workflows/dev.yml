@@ -1,0 +1,37 @@
+name: CICD Workflow
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  pull:
+    name: pull code
+    runs-on: self-hosted
+
+    steps:
+    - name: Install SSH Key
+      run: |
+        install -m 600 -D /dev/null ~/.ssh/id_rsa
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        host="${{ secrets.SSH_HOST }}"
+        hosts="$(dig +short "$host" | grep -v '\.$' | sed -z 's|\n|,|g')$host"
+        ssh-keyscan -H "$hosts" > ~/.ssh/known_hosts
+
+    - name: Connect and Pull Code
+      run: |
+        ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
+        cd ${{ secrets.WORK_DIR }} \
+        && git checkout ${{ secrets.MAIN_BRANCH }} \
+        && git stash \
+        && git pull \
+        && chmod -R 777 storage bootstrap/cache \
+        && update-alternatives --set php /usr/bin/php8.2 \
+        && npm ci \
+        && npm run build \
+        && make after-pull \
+        && php artisan optimize:clear
+        "
+
+    - name: cleanup
+      run: rm -rf ~/.ssh

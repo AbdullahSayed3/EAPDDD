@@ -1,0 +1,7 @@
+to update female
+UPDATE `applications` SET gender = 'female' WHERE first_name LIKE '%(F)%';
+
+
+UPDATE applications SET gender = 'male' WHERE gender  IS NULL;
+
+

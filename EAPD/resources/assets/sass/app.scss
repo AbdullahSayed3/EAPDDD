@@ -1,0 +1,881 @@
+// Variables
+@use "variables" as *;
+
+// Pre-compute Sass color values
+$select-border-color: transparent;
+$adv-select-border-color: $default-border;
+$select-focus-border-color: mix(white, $primary, 50%);
+$select-focus-shadow-color: rgba($primary, 0.25);
+$select-item-bg: mix(white, $primary, 90%);
+$select-item-border: mix(white, $primary, 60%);
+$select-item-text: $primary;
+$select-shadow-color: rgba(0, 0, 0, 0.15);
+
+// Select common properties using theme colors
+:root {
+    --select-height: 38px;
+    --select-padding: 0.375rem 0.75rem;
+    --select-border-color: #{$select-border-color};
+    --adv-select-border-color: #{$adv-select-border-color};
+    --select-border-radius: 0.25rem;
+    --select-focus-border-color: #{$select-focus-border-color};
+    --select-focus-box-shadow: 0 0 0 0.25rem #{$select-focus-shadow-color};
+    --select-item-bg: #{$select-item-bg};
+    --select-item-border: #{$select-item-border};
+    --select-item-text: #{$select-item-text};
+}
+
+:root {
+    --primary-color: #{$primary};
+    --secondary-color: #{$secondary};
+    --danger-color: #{$danger};
+    --white-color: #{$white};
+}
+
+// Enable RTL
+$enable-rtl: true;
+
+// Import Bootstrap and other CSS
+@import "bootstrap/scss/bootstrap";
+@import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
+@import "select2/dist/css/select2.min.css";
+@import "bootstrap-datepicker/dist/css/bootstrap-datepicker.css";
+
+// Fonts
+@import url("https://fonts.googleapis.com/css?family=Nunito");
+
+.navbar-laravel {
+    background-color: #fff;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.04);
+}
+
+// Optional: additional RTL styles
+body[dir="rtl"] {
+    text-align: right;
+
+    .navbar-laravel {
+        direction: rtl;
+    }
+}
+
+body {
+    background-color: $background;
+}
+
+:root {
+    --header-height: 60px;
+}
+
+body {
+    overflow-x: hidden;
+    // padding-top: var(--header-height);
+}
+
+.rotate-180 {
+    transform: rotate(180deg);
+    transition: transform 0.2s;
+}
+
+/* Header styles */
+.header {
+    height: var(--header-height);
+    z-index: 1040;
+}
+
+/* Content wrapper styles */
+.content-wrapper {
+    transition: margin var(--transition-speed) ease;
+    min-height: calc(100vh - var(--header-height));
+    max-width: var(--content-width);
+    // margin-top: var(--header-height);
+}
+
+/* Mobile overlay for sidebar */
+@media (max-width: 991.98px) {
+    body.sidebar-open::before {
+        content: "";
+        position: fixed;
+        top: var(--header-height);
+        left: 0;
+        width: 100%;
+        height: calc(100% - var(--header-height));
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1025;
+        backdrop-filter: blur(2px);
+    }
+}
+
+// .content-wrapper {
+//     max-width: 94.33% !important;
+// }
+
+.btn {
+    border: none;
+    margin-top: 0.125rem;
+    margin-bottom: 0.125rem;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.125rem;
+    transition:
+        0.3s ease,
+        transform 0.3s ease;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    /* Slightly enlarge on hover */
+}
+
+.btn-close {
+    margin-left: 0 !important;
+}
+
+.breadcrumb {
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+    padding: 8px 16px;
+    margin-bottom: 16px;
+    list-style: none;
+    border-radius: 4px;
+}
+
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+}
+
+.breadcrumb-item + .breadcrumb-item::after {
+    content: "<";
+    padding: 0 8px;
+    color: #6c757d;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "";
+}
+
+/* RTL Styles */
+[dir="rtl"] {
+    .breadcrumb {
+        flex-direction: row-reverse;
+    }
+
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: "";
+        padding: 0 8px;
+        color: #6c757d;
+    }
+
+    .breadcrumb-item + .breadcrumb-item::after {
+        content: "<";
+    }
+}
+
+ul {
+    padding: 0;
+}
+
+a {
+    line-height: initial;
+}
+
+input {
+    // border-radius: 2px !important;
+    margin-top: 0.3125rem;
+    margin-bottom: 5px;
+}
+
+input[type="file"] {
+    padding: 8px;
+    @if selector-exists('[dir="rtl"]') {
+        padding-right: 0;
+    } @else {
+        padding-left: 0;
+    }
+    border-radius: 6px;
+    background-color: $body-bg;
+    color: $primary;
+    cursor: pointer;
+
+    &::file-selector-button {
+        margin-inline-start: 1px;
+        margin-inline-end: 6px;
+        padding: 6px 12px;
+        border: none;
+        border-radius: 4px;
+        background-color: $primary;
+        color: $white;
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+    // &::file-selector-button:hover {
+    //   background-color: $blue;
+    //   color: $primary;
+    // }
+}
+
+/* Table Link Styles */
+table a {
+    color: $primary;
+    text-decoration: none;
+    position: relative;
+    transition: all 0.3s ease;
+    line-height: initial;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    display: inline-block;
+    white-space: nowrap;
+    max-width: 360px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+table a:hover {
+    color: white;
+    background-color: $primary;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+table a:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: white;
+    transition: width 0.3s ease;
+}
+
+table a:hover:after {
+    width: 100%;
+}
+
+table a:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba($primary, 0.4);
+}
+
+/* Read More Link Styles */
+table a.read-more {
+    position: relative;
+    padding-right: 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+table a.read-more::before {
+    content: "...";
+    position: absolute;
+    right: 0.5rem;
+    color: $primary;
+}
+
+table a.read-more.expanded {
+    white-space: normal;
+    max-width: none;
+}
+
+table a.read-more.expanded::before {
+    display: none;
+}
+
+/* Tooltip Styles */
+.tooltip {
+    font-size: 0.875rem;
+    opacity: 1 !important;
+}
+
+.tooltip-inner {
+    max-width: 300px;
+    padding: 0.5rem 1rem;
+    color: #fff;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.tooltip.bs-tooltip-top .tooltip-arrow::before {
+    border-top-color: rgba(0, 0, 0, 0.8);
+}
+
+/* RTL specific table link styles */
+[dir="rtl"] table a.read-more {
+    padding-left: 2rem;
+    padding-right: 0.5rem;
+}
+
+[dir="rtl"] table a.read-more::before {
+    right: auto;
+    left: 0.5rem;
+}
+
+option {
+    padding: 2.5rem !important;
+}
+
+// Button color tweaks to match theme
+.btn-primary {
+    background-color: $primary;
+    border-color: $primary;
+
+    &:hover {
+        background-color: darken($primary, 10%);
+        border-color: darken($primary, 20%);
+    }
+}
+
+.btn-danger {
+    background-color: $danger;
+    border-color: $danger;
+
+    &:hover {
+        background-color: darken($danger, 10%);
+        border-color: darken($danger, 20%);
+    }
+}
+
+// Remove previous Select2 styles
+.select2 {
+    width: 100% !important;
+}
+
+/* Fix z-index for all modals */
+.select2-dropdown {
+    z-index: 1060 !important; /* Higher than Bootstrap modal's 1050 */
+}
+
+.modal-header {
+    justify-content: space-between;
+}
+
+#advancedSearchModal {
+    // Enhanced Select2 styling
+    .select2-container {
+        display: block;
+        width: 100% !important;
+
+        .select2-selection {
+            border: 1px solid var(--adv-select-border-color);
+            border-radius: var(--select-border-radius);
+            transition:
+                border-color 0.15s ease-in-out,
+                box-shadow 0.15s ease-in-out;
+
+            &:focus-within {
+                border-color: var(--select-focus-border-color);
+                box-shadow: var(--select-focus-box-shadow);
+            }
+        }
+
+        // Single select
+        .select2-selection--single {
+            background-color: transparent;
+            height: var(--select-height);
+            padding: 0.175rem 0.75rem;
+
+            .select2-selection__rendered {
+                color: $body-color;
+                line-height: 1.5;
+                padding-left: 0;
+                padding-right: 20px;
+                height: 100%;
+                display: flex;
+                align-items: center;
+            }
+
+            .select2-selection__arrow {
+                height: 100%;
+                width: 25px;
+
+                b {
+                    border-color: $secondary transparent transparent;
+                    border-width: 5px 5px 0;
+                }
+            }
+
+            .select2-selection__placeholder {
+                color: $secondary;
+            }
+        }
+
+        // Multiple select
+        .select2-selection--multiple {
+            min-height: var(--select-height);
+
+            .select2-selection__rendered {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+                padding: 4px 8px;
+                margin: 0;
+            }
+
+            .select2-selection__choice {
+                background-color: var(--select-item-bg);
+                border: 1px solid var(--select-item-border);
+                color: var(--select-item-text);
+                border-radius: 15px;
+                padding: 0 12px 0 5px;
+                margin: 2px 0;
+                display: flex;
+                align-items: center;
+                font-size: 0.9rem;
+                font-weight: 500;
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+                transition: all 0.2s ease;
+                max-width: calc(100% - 10px);
+                position: relative;
+
+                &:hover {
+                    background-color: #{darken($select-item-bg, 2%)};
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    transform: translateY(-1px);
+                }
+
+                // Remove button styling
+                .select2-selection__choice__remove {
+                    color: var(--select-item-text);
+                    opacity: 0.7;
+                    width: 22px;
+                    height: 22px;
+                    padding: 0;
+                    margin: 0;
+                    font-size: 1.2rem;
+                    font-weight: bold;
+                    line-height: 1;
+                    cursor: pointer;
+                    border: none;
+                    background: transparent;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.2s ease;
+                    position: relative;
+
+                    span {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        height: 100%;
+                        width: 100%;
+                    }
+
+                    &:hover {
+                        opacity: 1;
+                        color: $danger;
+                        background-color: rgba($danger, 0.1);
+                    }
+
+                    &:focus {
+                        outline: none;
+                        box-shadow: 0 0 0 2px rgba($primary, 0.2);
+                    }
+                }
+
+                // Text display styling
+                .select2-selection__choice__display {
+                    padding: 4px 0 4px 4px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    max-width: calc(100% - 22px);
+                    font-size: 0.85rem;
+                    line-height: 1.2;
+                }
+            }
+
+            .select2-search__field {
+                margin-top: auto;
+                margin-bottom: auto;
+                // padding: 4px 6px;
+                min-width: 120px;
+                flex-grow: 1;
+
+                &::placeholder {
+                    color: $secondary;
+                    opacity: 0.7;
+                }
+            }
+        }
+    }
+}
+
+// Enhanced Select2 styling
+.select2-container {
+    display: block;
+    width: 100% !important;
+
+    .select2-selection {
+        border: 1px solid var(--select-border-color);
+        border-radius: var(--select-border-radius);
+        transition:
+            border-color 0.15s ease-in-out,
+            box-shadow 0.15s ease-in-out;
+
+        &:focus-within {
+            border-color: var(--select-focus-border-color);
+            box-shadow: var(--select-focus-box-shadow);
+        }
+    }
+
+    // Single select
+    .select2-selection--single {
+        background-color: transparent;
+        height: var(--select-height);
+        padding: 0.175rem 0.75rem;
+
+        .select2-selection__rendered {
+            color: $body-color;
+            line-height: 1.5;
+            padding-left: 0;
+            padding-right: 20px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .select2-selection__arrow {
+            height: 0;
+            width: 25px;
+
+            b {
+                border-color: $secondary transparent transparent;
+                border-width: 5px 5px 0;
+            }
+        }
+
+        .select2-selection__placeholder {
+            color: $secondary;
+        }
+    }
+
+    // Multiple select
+    .select2-selection--multiple {
+        min-height: var(--select-height);
+        background-color: transparent;
+
+        .select2-selection__rendered {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 4px 8px;
+            margin: 0;
+        }
+
+        .select2-selection__choice {
+            background-color: var(--select-item-bg);
+            border: 1px solid var(--select-item-border);
+            color: var(--select-item-text);
+            border-radius: 15px;
+            padding: 0 12px 0 5px;
+            margin: 2px 0;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+            max-width: calc(100% - 10px);
+            position: relative;
+
+            &:hover {
+                background-color: #{darken($select-item-bg, 2%)};
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                transform: translateY(-1px);
+            }
+
+            // Remove button styling
+            .select2-selection__choice__remove {
+                color: var(--select-item-text);
+                opacity: 0.7;
+                width: 22px;
+                height: 22px;
+                padding: 0;
+                margin: 0;
+                font-size: 1.2rem;
+                font-weight: bold;
+                line-height: 1;
+                cursor: pointer;
+                border: none;
+                background: transparent;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.2s ease;
+                position: relative;
+
+                span {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100%;
+                    width: 100%;
+                }
+
+                &:hover {
+                    opacity: 1;
+                    color: $danger;
+                    background-color: rgba($danger, 0.1);
+                }
+
+                &:focus {
+                    outline: none;
+                    box-shadow: 0 0 0 2px rgba($primary, 0.2);
+                }
+            }
+
+            // Text display styling
+            .select2-selection__choice__display {
+                padding: 4px 0 4px 4px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: calc(100% - 22px);
+                font-size: 0.85rem;
+                line-height: 1.2;
+            }
+        }
+
+        .select2-search__field {
+            margin: 4px 0;
+            padding: 2px 6px;
+            min-width: 120px;
+            flex-grow: 1;
+
+            &::placeholder {
+                color: $secondary;
+                opacity: 0.7;
+            }
+        }
+    }
+}
+
+// Dropdown styles
+.select2-container--open .select2-dropdown {
+    border-color: var(--select-border-color);
+    box-shadow: 0 4px 10px #{$select-shadow-color};
+
+    .select2-search__field {
+        border: 1px solid var(--select-border-color);
+        border-radius: var(--select-border-radius);
+        padding: 0.375rem 0.75rem;
+        margin-bottom: 8px;
+
+        &:focus {
+            border-color: var(--select-focus-border-color);
+            box-shadow: var(--select-focus-box-shadow);
+            outline: none;
+        }
+    }
+
+    .select2-results__options {
+        max-height: 250px;
+        overflow-y: auto;
+        padding: 4px 0;
+        scrollbar-width: thin;
+
+        &::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: lighten($secondary, 70%);
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: lighten($secondary, 50%);
+            border-radius: 3px;
+        }
+    }
+
+    .select2-results__option {
+        padding: 8px 12px;
+        user-select: none;
+        transition: background-color 0.15s ease;
+    }
+}
+
+.select2-results__option--selected {
+    background-color: #{$select-item-bg};
+    // color: #{$select-item-text};
+}
+
+// RTL support for Select2
+[dir="rtl"] {
+    .select2-container {
+        .select2-selection--single {
+            .select2-selection__rendered {
+                padding-right: 0;
+                padding-left: 20px;
+                text-align: right;
+            }
+
+            .select2-selection__arrow {
+                right: auto;
+                left: 1px;
+            }
+        }
+
+        .select2-selection--multiple {
+            .select2-selection__choice {
+                padding: 0 8px 0 12px;
+
+                .select2-selection__choice__display {
+                    padding: 6px 4px 6px 2px;
+                }
+            }
+        }
+    }
+}
+
+// Mobile optimizations for selection choices
+@media (max-width: 767.98px) {
+    .select2-container {
+        .select2-selection--multiple {
+            .select2-selection__choice {
+                padding: 0 12px 0 8px;
+
+                .select2-selection__choice__remove {
+                    width: 24px;
+                    height: 24px;
+                    font-size: 1.25rem;
+                }
+
+                .select2-selection__choice__display {
+                    font-size: 0.9rem;
+                    padding: 6px 2px 6px 4px;
+                }
+            }
+        }
+    }
+
+    .select2-container--open .select2-dropdown {
+        .select2-results__option {
+            padding: 6px 10px;
+        }
+    }
+}
+
+/* Table Header Styles */
+table thead th {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    padding: 0.75rem;
+    vertical-align: middle;
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+}
+
+/* RTL Table Header Styles */
+[dir="rtl"] table thead th {
+    text-align: right;
+}
+
+/* Table Visibility Fixes */
+.courses-table {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+// If using DataTables, add these overrides
+table.dataTable {
+    &.courses-table {
+        display: table !important;
+        width: 100% !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+}
+
+/* Tab Visibility Control */
+.nav-tabs .nav-link:not(.active) {
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover:not(.active) {
+    opacity: 1;
+}
+
+.tab-content > .tab-pane {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.tab-content > .active {
+    display: block;
+    opacity: 1;
+}
+
+/* Collapsed Sidebar Styles */
+.sidebar-collapsed .sidebar-container {
+    width: max-content !important;
+}
+
+.sidebar-collapsed .sidebar-container .nav-text,
+.sidebar-collapsed .sidebar-container .language-switcher,
+.sidebar-collapsed .sidebar-container .user-profile,
+.sidebar-collapsed .sidebar-container .sidebar-logo {
+    display: none !important;
+}
+
+.sidebar-collapsed .sidebar-container .nav-link {
+    padding: 0.5rem !important;
+    justify-content: center !important;
+}
+
+.sidebar-collapsed .sidebar-container .nav-link i {
+    margin: 0 !important;
+    font-size: 1.2rem;
+}
+
+.sidebar-collapsed .sidebar-container .fa-chevron-down {
+    display: none !important;
+}
+
+[dir="rtl"] .sidebar-collapsed .content-wrapper {
+    // margin-right: 60px !important;
+    margin-left: 0 !important;
+}
+
+// Show tooltips on hover in collapsed state
+.sidebar-collapsed .sidebar-container .nav-link {
+    position: relative;
+}
+
+.sidebar-collapsed .sidebar-container .nav-link:hover::after {
+    content: attr(data-title);
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--bs-primary);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    z-index: 1000;
+    margin-left: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+[dir="rtl"] .sidebar-collapsed .sidebar-container .nav-link:hover::after {
+    left: auto;
+    right: 100%;
+    margin-left: 0;
+    margin-right: 10px;
+}
